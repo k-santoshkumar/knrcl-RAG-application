@@ -3,8 +3,6 @@ from with_embeddings import answer_financial_question
 from langchain_openai import AzureChatOpenAI
 from dotenv import load_dotenv
 import os
-import re
-from PyPDF2 import PdfReader, PdfWriter
 
 def rewrite_followup_question(chat_history, new_question):
     greetings = ["hello", "hi", "hey", "good morning", "good afternoon", "good evening"]
