@@ -78,13 +78,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-
-
-echo "# knrcl-RAG-application" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/cubixso-dmn-tool/knrcl-RAG-application.git
-git push -u origin main
