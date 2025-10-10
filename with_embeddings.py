@@ -9,7 +9,6 @@ from langchain_openai import AzureOpenAIEmbeddings, AzureChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
-import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
 
