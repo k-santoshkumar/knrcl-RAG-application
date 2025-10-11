@@ -32,17 +32,52 @@ llm = AzureChatOpenAI(
 )
 
 # === Helper: PDF Processing ===
+from typing import List
+from langchain.schema import Document
+from PyPDF2 import PdfReader
+import os
+
 def process_pdf(file_path: str) -> List[Document]:
+    """
+    Processes a PDF into LangChain Documents with 1-page overlap.
+    Each chunk contains text from two consecutive pages 
+
+    Args:
+        file_path (str): Path to the PDF file.
+
+    Returns:
+        List[Document]: A list of LangChain Documents with overlapping page content.
+    """
     try:
         reader = PdfReader(file_path)
         file_name = os.path.basename(file_path)
-        return [
-            Document(
-                page_content=page.extract_text(),
-                metadata={"filename": file_name, "page_number": i + 1}
-            )
-            for i, page in enumerate(reader.pages) if page.extract_text()
-        ]
+        num_pages = len(reader.pages)
+        documents = []
+
+        for i in range(num_pages):
+            # Determine the page range for this chunk
+            start_page = i
+            end_page = min(i + 1, num_pages - 1)
+
+            # Combine the text from current and next page (if exists)
+            text = reader.pages[start_page].extract_text() or ""
+            if end_page != start_page:  # if there’s a next page
+                text += "\n" + (reader.pages[end_page].extract_text() or "")
+
+            if text.strip():
+                documents.append(
+                    Document(
+                        page_content=text.strip(),
+                        metadata={
+                            "filename": file_name,
+                            "start_page": start_page + 1,
+                            "end_page": end_page + 1,
+                        }
+                    )
+                )
+
+        return documents
+
     except Exception as e:
         print(f"❌ Error reading PDF {file_path}: {e}")
         return []
