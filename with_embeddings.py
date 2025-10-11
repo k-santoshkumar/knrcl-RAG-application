@@ -11,7 +11,6 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from sklearn.metrics.pairwise import cosine_similarity
 
-
 # === Load environment ===
 load_dotenv()
 
@@ -32,15 +31,10 @@ llm = AzureChatOpenAI(
 )
 
 # === Helper: PDF Processing ===
-from typing import List
-from langchain.schema import Document
-from PyPDF2 import PdfReader
-import os
-
 def process_pdf(file_path: str) -> List[Document]:
     """
     Processes a PDF into LangChain Documents with 1-page overlap.
-    Each chunk contains text from two consecutive pages 
+    Each chunk contains text from two consecutive pages (1-page overlap).
 
     Args:
         file_path (str): Path to the PDF file.
